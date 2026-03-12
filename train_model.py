@@ -115,8 +115,8 @@ print(f"R2 Score: {r2:.3f}")  # Expect ~0.75-0.80
 # -----------------------------
 # Step 9: Save Model and Scaler
 # -----------------------------
-joblib.dump(stack_model, "student_score_model_best.pkl")
-joblib.dump(scaler, "student_score_scaler_best.pkl")
+joblib.dump(stack_model, "student_score_model_best.pkl",compress=3)
+joblib.dump(scaler, "student_score_scaler_best.pkl",compress=3)
 print("Best-accuracy stacked model and scaler saved!")
 
 # -----------------------------
