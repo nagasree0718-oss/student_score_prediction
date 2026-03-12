@@ -2,17 +2,25 @@
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 import joblib
+import os
+from sklearn.preprocessing import LabelEncoder
 
+# -----------------------------
 # Load trained model and scaler
-model = joblib.load("student_score_model_best.pkl")
-scaler = joblib.load("student_score_scaler_best.pkl")
+# -----------------------------
+BASE_DIR = os.path.dirname(__file__)  # ensures correct path on Streamlit Cloud
+model_path = os.path.join(BASE_DIR, "student_score_model_best.pkl")
+scaler_path = os.path.join(BASE_DIR, "student_score_scaler_best.pkl")
 
+model = joblib.load(model_path)
+scaler = joblib.load(scaler_path)
+
+# -----------------------------
+# Streamlit UI
+# -----------------------------
 st.title("Student Exam Score Prediction")
-
-# -----------------------------
-# Input fields
-# -----------------------------
 st.header("Enter student details:")
 
 # Numeric inputs
@@ -23,13 +31,13 @@ previous_scores = st.number_input("Previous Scores", min_value=0, max_value=100,
 
 # Feature engineering
 study_efficiency = hours_studied / (sleep_hours + 0.1)
+
 # Motivation level
 motivation_level = st.selectbox("Motivation Level", ["Low", "Medium", "High"])
 motivation_map = {"Low": 0, "Medium": 1, "High": 2}
 motivation_score = motivation_map[motivation_level]
 
 # Categorical inputs
-categorical_inputs = {}
 categorical_cols = [
     "Parental_Involvement", "Access_to_Resources", "Extracurricular_Activities",
     "Internet_Access", "Tutoring_Sessions", "Family_Income", "Teacher_Quality",
@@ -37,24 +45,20 @@ categorical_cols = [
     "Parental_Education_Level", "Distance_from_Home", "Gender"
 ]
 
+categorical_inputs = {}
 for col in categorical_cols:
     options = st.selectbox(col, ["Low", "Medium", "High", "Yes", "No", "Public", "Private", "Near", "Far", "Unknown", "Male", "Female"])
     categorical_inputs[col] = options
 
 # Encode categorical values
-from sklearn.preprocessing import LabelEncoder
-
 for col in categorical_cols:
     le = LabelEncoder()
-    # Fit on all possible options
     le.fit(["Low", "Medium", "High", "Yes", "No", "Public", "Private", "Near", "Far", "Unknown", "Male", "Female"])
     categorical_inputs[col] = le.transform([categorical_inputs[col]])[0]
 
 # -----------------------------
-# Create dataframe for model
+# Create input dataframe
 # -----------------------------
-import numpy as np
-
 input_dict = {
     "Hours_Studied": hours_studied,
     "Attendance": attendance,
