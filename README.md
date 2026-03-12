@@ -42,3 +42,5 @@ This machine learning project predicts student exam scores based on study habits
 1. Clone the repository:
    ```bash
    git clone https://github.com/nagasree0718-oss/student_score_prediction.git
+
+live link: https://studentscoreprediction-927gzrhoxycxcnwneqovai.streamlit.app/
