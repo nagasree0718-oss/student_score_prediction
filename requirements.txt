@@ -2,6 +2,6 @@ pandas
 numpy
 scikit-learn
 matplotlib
-streamlit
+streamlit==1.19.0
 xgboost
-altair==6.0.0
+altair==4.2.0
